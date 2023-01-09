@@ -4,11 +4,13 @@ import com.steatoda.grpcbench.proto.Payload;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
+import okio.BufferedSink;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-import java.io.ByteArrayOutputStream;
+import javax.annotation.Nullable;
 import java.io.IOException;
+import java.io.OutputStream;
 
 public class EatRestService {
 
@@ -18,15 +20,33 @@ public class EatRestService {
 
 	public Payload eat(Payload[] payloads) {
 
-		RequestBody requestBody;
-		try {
-			ByteArrayOutputStream ostream = new ByteArrayOutputStream();
-			for (Payload payload : payloads)
-				payload.writeDelimitedTo(ostream);
-			requestBody = RequestBody.create(MediaType.parse("application/protobuf"), ostream.toByteArray());
-		} catch (IOException e) {
-			throw new RuntimeException("Unable to construct request body", e);
-		}
+		RequestBody requestBody = new RequestBody() {
+			@Nullable
+			@Override
+			public MediaType contentType() {
+				return MediaType.parse("application/protobuf");
+			}
+			@Override
+			public void writeTo(BufferedSink sink) throws IOException {
+				OutputStream ostream = new OutputStream() {
+					@Override
+					public void write(int b) throws IOException {
+						sink.writeByte(b);
+					}
+					@Override
+					public void write(byte[] b) throws IOException {
+						sink.write(b);
+					}
+					@Override
+					public void write(byte[] b, int off, int len) throws IOException {
+						sink.write(b, off, len);
+					}
+				};
+				for (Payload payload : payloads)
+					payload.writeDelimitedTo(ostream);
+			}
+
+		};
 
 		Response<ResponseBody> response;
 		try {
