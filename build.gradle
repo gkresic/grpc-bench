@@ -1,0 +1,80 @@
+buildscript {
+	repositories {
+		gradlePluginPortal()
+	}
+	dependencies {
+		classpath 'com.google.protobuf:protobuf-gradle-plugin:0.9.1'
+	}
+}
+
+plugins {
+	id 'java'
+	id 'me.champeau.jmh' version '0.6.8'
+}
+
+apply plugin: 'com.google.protobuf'
+
+group 'com.steatoda'
+version '1.0.0'
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	protobufVersion = '3.21.12'
+	jacksonVersion = '2.13.4'
+	grpcVersion = '1.51.1'
+	vertxVersion = '4.3.7'
+	jmhVersion = '1.36'
+}
+
+dependencies {
+
+	implementation 'ch.qos.logback:logback-core:1.4.5'
+	implementation 'ch.qos.logback:logback-classic:1.4.5'
+	implementation 'org.slf4j:slf4j-api:2.0.6'
+
+	implementation "com.google.protobuf:protobuf-java:${protobufVersion}"
+
+	implementation "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
+	implementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
+	implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+
+	implementation "io.grpc:grpc-protobuf:${grpcVersion}"
+	implementation "io.grpc:grpc-stub:${grpcVersion}"
+	implementation 'javax.annotation:javax.annotation-api:1.3.2'
+	runtimeOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
+
+	implementation "io.vertx:vertx-web:${vertxVersion}"
+
+	implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+
+	jmh "org.openjdk.jmh:jmh-core:${jmhVersion}"
+	jmh "org.openjdk.jmh:jmh-generator-annprocess:${jmhVersion}"
+
+}
+
+protobuf {
+	protoc {
+		artifact = "com.google.protobuf:protoc:${protobufVersion}"
+	}
+	plugins {
+		grpc {
+			artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}"
+		}
+	}
+	generateProtoTasks {
+		all()*.plugins {
+			grpc {}
+		}
+	}
+}
+
+jmh {
+	//excludes = ['Grpc.*']
+	threads = (int) (Runtime.getRuntime().availableProcessors() / 2)
+	warmupIterations = 1
+	iterations = 1
+	fork = 1
+}

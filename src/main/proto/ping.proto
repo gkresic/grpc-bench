@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.steatoda.grpcbench.proto";
+
+package grpcbench;
+
+message Void {
+}
+
+service PingService {
+  rpc Ping(Void) returns (Void);
+}
