@@ -4,10 +4,8 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.steatoda.grpcbench.JsonUtil;
 import com.steatoda.grpcbench.jmh.JsonPayload;
 import com.steatoda.grpcbench.jmh.grpc.state.GrpcClientState;
-import com.steatoda.grpcbench.jmh.grpc.state.GrpcServerOfficialState;
 import com.steatoda.grpcbench.proto.Payload;
 import io.grpc.stub.StreamObserver;
-import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.Param;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
@@ -24,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 @State(Scope.Benchmark)
-public class GrpcOfficialBenchmark_3_EatStream {
+public class GrpcEatStreamBase {
 
 	@Setup
     public void setup() {
@@ -60,8 +58,7 @@ public class GrpcOfficialBenchmark_3_EatStream {
 
 	}
 
-	@Benchmark
-	public void benchmark(GrpcServerOfficialState serverState, GrpcClientState clientState, Blackhole blackhole) {
+	public void benchmark(GrpcClientState clientState, Blackhole blackhole) {
 
 		CountDownLatch finishLatch = new CountDownLatch(1);
 		AtomicReference<Throwable> error = new AtomicReference<>();
@@ -115,7 +112,7 @@ public class GrpcOfficialBenchmark_3_EatStream {
 
 	}
 
-	private static final Logger Log = LoggerFactory.getLogger(GrpcOfficialBenchmark_3_EatStream.class);
+	private static final Logger Log = LoggerFactory.getLogger(GrpcEatStreamBase.class);
 
 	@Param({"payload-10.json", "payload-100.json"})
 	String payloadFileName;

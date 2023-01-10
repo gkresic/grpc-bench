@@ -47,6 +47,7 @@ dependencies {
 	runtimeOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
 
 	implementation "io.vertx:vertx-web:${vertxVersion}"
+	implementation "io.vertx:vertx-grpc-server:${vertxVersion}"
 
 	implementation 'com.squareup.retrofit2:retrofit:2.9.0'
 
@@ -73,6 +74,7 @@ protobuf {
 
 jmh {
 	//excludes = ['Grpc.*']
+	//includes = ['.*EatStream']
 	threads = Runtime.getRuntime().availableProcessors()
 	warmupIterations = 1
 	iterations = 1

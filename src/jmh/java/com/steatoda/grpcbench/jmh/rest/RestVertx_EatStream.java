@@ -1,10 +1,10 @@
-package com.steatoda.grpcbench.jmh.grpc;
+package com.steatoda.grpcbench.jmh.rest;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.steatoda.grpcbench.JsonUtil;
 import com.steatoda.grpcbench.jmh.JsonPayload;
-import com.steatoda.grpcbench.jmh.grpc.state.RestClientState;
-import com.steatoda.grpcbench.jmh.grpc.state.RestServerVertxState;
+import com.steatoda.grpcbench.jmh.rest.state.RestClientState;
+import com.steatoda.grpcbench.jmh.rest.state.RestServerVertxState;
 import com.steatoda.grpcbench.proto.Payload;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.Level;
@@ -22,7 +22,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 
 @State(Scope.Benchmark)
-public class RestVertxBenchmark_EatStream {
+public class RestVertx_EatStream {
 
 	@Setup
     public void setup() {
@@ -77,7 +77,7 @@ public class RestVertxBenchmark_EatStream {
 		serverState.stop();
 	}
 
-	private static final Logger Log = LoggerFactory.getLogger(RestVertxBenchmark_EatStream.class);
+	private static final Logger Log = LoggerFactory.getLogger(RestVertx_EatStream.class);
 
 	@Param({"payload-10.json", "payload-100.json"})
 	String payloadFileName;

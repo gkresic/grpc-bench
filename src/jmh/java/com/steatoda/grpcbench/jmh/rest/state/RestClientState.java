@@ -1,4 +1,4 @@
-package com.steatoda.grpcbench.jmh.grpc.state;
+package com.steatoda.grpcbench.jmh.rest.state;
 
 import com.steatoda.grpcbench.rest.client.RestClient;
 import org.openjdk.jmh.annotations.Scope;

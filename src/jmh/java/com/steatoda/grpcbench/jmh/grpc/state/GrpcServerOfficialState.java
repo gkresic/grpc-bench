@@ -14,7 +14,7 @@ public class GrpcServerOfficialState {
 		try {
 			grpcServer = new GrpcServer();
 		} catch (IOException e) {
-			throw new RuntimeException("Error initializing GrpcServer", e);
+			throw new RuntimeException("Error initializing official gRPC server", e);
 		}
 
 	}

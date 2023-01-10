@@ -34,14 +34,14 @@ public class RestVerticle extends AbstractVerticle {
 												  .setPort(Port)
 		;
 
-		server = vertx.createHttpServer(httpServerOptions);
-		server.requestHandler(new RestRouter(vertx));
+		httpServer = vertx.createHttpServer(httpServerOptions);
+		httpServer.requestHandler(new RestRouter(vertx));
 
 	}
 
 	@Override
 	public void start(Promise<Void> startPromise) {
-		server.listen(result -> {
+		httpServer.listen(result -> {
 			if (result.succeeded())
 				startPromise.complete();
 			else
@@ -50,7 +50,7 @@ public class RestVerticle extends AbstractVerticle {
 	}
 
 	public void stop(Promise<Void> stopPromise) {
-		server.close(result -> {
+		httpServer.close(result -> {
 			if (result.succeeded())
 				stopPromise.complete();
 			else
@@ -61,6 +61,6 @@ public class RestVerticle extends AbstractVerticle {
 	@SuppressWarnings("unused")
 	private static final Logger Log = LoggerFactory.getLogger(RestVerticle.class);
 
-	private final HttpServer server;
+	private final HttpServer httpServer;
 
 }

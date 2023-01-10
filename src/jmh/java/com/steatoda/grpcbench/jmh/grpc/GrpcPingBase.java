@@ -1,10 +1,8 @@
 package com.steatoda.grpcbench.jmh.grpc;
 
 import com.steatoda.grpcbench.jmh.grpc.state.GrpcClientState;
-import com.steatoda.grpcbench.jmh.grpc.state.GrpcServerOfficialState;
 import com.steatoda.grpcbench.proto.Void;
 import io.grpc.stub.StreamObserver;
-import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
@@ -17,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 @State(Scope.Benchmark)
-public class GrpcOfficialBenchmark_1_Ping {
+public abstract class GrpcPingBase {
 
 	@Setup
     public void setup() {
@@ -26,8 +24,7 @@ public class GrpcOfficialBenchmark_1_Ping {
 
 	}
 
-	@Benchmark
-	public void benchmark(GrpcServerOfficialState serverState, GrpcClientState clientState, Blackhole blackhole) {
+	public void benchmark(GrpcClientState clientState, Blackhole blackhole) {
 
 		CountDownLatch finishLatch = new CountDownLatch(1);
 		AtomicReference<Throwable> error = new AtomicReference<>();
@@ -65,7 +62,7 @@ public class GrpcOfficialBenchmark_1_Ping {
 
 	}
 
-	private static final Logger Log = LoggerFactory.getLogger(GrpcOfficialBenchmark_1_Ping.class);
+	private static final Logger Log = LoggerFactory.getLogger(GrpcPingBase.class);
 
 	private Void nothing;
 

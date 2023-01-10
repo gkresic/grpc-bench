@@ -1,4 +1,4 @@
-package com.steatoda.grpcbench.jmh.grpc.state;
+package com.steatoda.grpcbench.jmh.rest.state;
 
 import com.steatoda.grpcbench.rest.server.vertx.VertxServer;
 import org.openjdk.jmh.annotations.Scope;
@@ -12,13 +12,19 @@ public class RestServerVertxState {
 		try {
 			vertxServer = new VertxServer();
 		} catch (Exception e) {
-			throw new RuntimeException("Error initializing VertxServer", e);
+			throw new RuntimeException("Error initializing Vert.x REST server", e);
 		}
 
 	}
 
 	public void stop() {
-		vertxServer.stop();
+
+		try {
+			vertxServer.stop();
+		} catch (Exception e) {
+			throw new RuntimeException("Error stopping Vert.x REST server", e);
+		}
+
 	}
 
 	final VertxServer vertxServer;

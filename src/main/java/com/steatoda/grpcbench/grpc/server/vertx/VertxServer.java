@@ -1,15 +1,20 @@
-package com.steatoda.grpcbench.rest.server.vertx;
+package com.steatoda.grpcbench.grpc.server.vertx;
 
+import com.steatoda.grpcbench.grpc.GrpcParams;
+import com.steatoda.grpcbench.proto.PingServiceGrpc;
+import com.steatoda.grpcbench.proto.Void;
 import io.vertx.core.AsyncResult;
-import io.vertx.core.CompositeFuture;
+import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
+import io.vertx.core.http.HttpServer;
+import io.vertx.core.http.HttpServerOptions;
+import io.vertx.grpc.server.GrpcServer;
+import io.vertx.grpc.server.GrpcServerResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class VertxServer {
 
@@ -19,18 +24,29 @@ public class VertxServer {
 
 		vertx = Vertx.vertx(vertxOptions);
 
-		awaitComplete(CompositeFuture.all(
-			Stream.of(
-				RestVerticle.deploy(vertx)
-			)
-			.collect(Collectors.toList())
-		));
+		GrpcServer grpcServer = GrpcServer.server(vertx);
+
+		HttpServerOptions httpServerOptions = new HttpServerOptions()
+												  .setPort(GrpcParams.Port)
+		;
+		httpServer = vertx.createHttpServer(httpServerOptions);
+
+		PingService.register(grpcServer);
+		EatService.register(grpcServer);
+
+		awaitComplete(
+			httpServer
+				.requestHandler(grpcServer)
+				.listen()
+		);
 
 		Log.debug("Vert.x server constructed");
 
 	}
 
 	public void stop() throws InterruptedException {
+
+		awaitComplete(httpServer.close());
 
 		awaitComplete(vertx.close());
 
@@ -84,5 +100,6 @@ public class VertxServer {
 	private static final Logger Log = LoggerFactory.getLogger(VertxServer.class);
 
 	private final Vertx vertx;
+	private final HttpServer httpServer;
 
 }
