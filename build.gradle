@@ -73,7 +73,7 @@ protobuf {
 
 jmh {
 	//excludes = ['Grpc.*']
-	threads = (int) (Runtime.getRuntime().availableProcessors() / 2)
+	threads = Runtime.getRuntime().availableProcessors()
 	warmupIterations = 1
 	iterations = 1
 	fork = 1
