@@ -1,7 +1,7 @@
 package com.steatoda.grpcbench.grpc.server.vertx;
 
+import com.google.protobuf.Empty;
 import com.steatoda.grpcbench.proto.PingServiceGrpc;
-import com.steatoda.grpcbench.proto.Void;
 import io.vertx.grpc.server.GrpcServer;
 import io.vertx.grpc.server.GrpcServerRequest;
 import io.vertx.grpc.server.GrpcServerResponse;
@@ -16,15 +16,15 @@ public class PingService {
 
 	}
 
-	private static void ping(GrpcServerRequest<Void, Void> request) {
+	private static void ping(GrpcServerRequest<Empty, Empty> request) {
 
 		Log.trace("Ping!");
 
-		request.handler(nothing -> {
+		request.handler(empty -> {
 
-			GrpcServerResponse<Void, Void> response = request.response();
+			GrpcServerResponse<Empty, Empty> response = request.response();
 
-			response.end(nothing);
+			response.end(empty);
 
 		});
 

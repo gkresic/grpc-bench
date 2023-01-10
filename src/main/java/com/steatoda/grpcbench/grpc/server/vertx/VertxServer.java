@@ -1,16 +1,12 @@
 package com.steatoda.grpcbench.grpc.server.vertx;
 
 import com.steatoda.grpcbench.grpc.GrpcParams;
-import com.steatoda.grpcbench.proto.PingServiceGrpc;
-import com.steatoda.grpcbench.proto.Void;
 import io.vertx.core.AsyncResult;
-import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.grpc.server.GrpcServer;
-import io.vertx.grpc.server.GrpcServerResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

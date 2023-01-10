@@ -1,7 +1,7 @@
 package com.steatoda.grpcbench.jmh.grpc;
 
+import com.google.protobuf.Empty;
 import com.steatoda.grpcbench.jmh.grpc.state.GrpcClientState;
-import com.steatoda.grpcbench.proto.Void;
 import io.grpc.stub.StreamObserver;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
@@ -20,7 +20,7 @@ public abstract class GrpcPingBase {
 	@Setup
     public void setup() {
 
-		nothing = Void.newBuilder().build();
+		empty = Empty.newBuilder().build();
 
 	}
 
@@ -29,11 +29,11 @@ public abstract class GrpcPingBase {
 		CountDownLatch finishLatch = new CountDownLatch(1);
 		AtomicReference<Throwable> error = new AtomicReference<>();
 
-		StreamObserver<Void> responseObserver = new StreamObserver<>() {
+		StreamObserver<Empty> responseObserver = new StreamObserver<>() {
 			@Override
-			public void onNext(Void nothing) {
+			public void onNext(Empty empty) {
 				Log.trace("Got ping response");
-				blackhole.consume(nothing);
+				blackhole.consume(empty);
 			}
 			@Override
 			public void onError(Throwable t) {
@@ -48,7 +48,7 @@ public abstract class GrpcPingBase {
 			}
 		};
 
-		clientState.client().pingStub().ping(nothing, responseObserver);
+		clientState.client().pingStub().ping(empty, responseObserver);
 
 		// receiving happens asynchronously
 		try {
@@ -64,6 +64,6 @@ public abstract class GrpcPingBase {
 
 	private static final Logger Log = LoggerFactory.getLogger(GrpcPingBase.class);
 
-	private Void nothing;
+	private Empty empty;
 
 }

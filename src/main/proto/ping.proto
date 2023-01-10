@@ -5,9 +5,8 @@ option java_package = "com.steatoda.grpcbench.proto";
 
 package grpcbench;
 
-message Void {
-}
+import "google/protobuf/empty.proto";
 
 service PingService {
-  rpc Ping(Void) returns (Void);
+  rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
